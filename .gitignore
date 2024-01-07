@@ -1,0 +1,9 @@
+env
+scraping.ini
+test.py
+test.txt
+input
+
+# IntelliJ
+.idea
+*.iml
