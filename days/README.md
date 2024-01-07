@@ -284,7 +284,7 @@ A = i + \frac{b}{2} - 1 \iff i = A - \frac{b}{2} + 1 \implies i + b = A + \frac{
 ```
 
 In the formula for shoelace the area we are calculating constitutes A and the total steps taken which is just the total # blocks constitutes b. As can be seen with a simple rewrite we can get a formula for the desired total area, where we have access to all the variables in order to calculate it, which is A and b.
-For intuition as to why we have to add shoelace with `$\frac{b}{2} + 1$` can be found [here](https://www.reddit.com/r/adventofcode/comments/18l0qtr/2023_day_18_solutions/kdvs6lr/).
+For intuition as to why we have to add shoelace with $\frac{b}{2} + 1$ can be found [here](https://www.reddit.com/r/adventofcode/comments/18l0qtr/2023_day_18_solutions/kdvs6lr/).
 
 ---
 
@@ -304,7 +304,7 @@ A is accepted and R refused. The left side of any subtree constitutes the condit
 
 With this in mind, part 1 was just straightforward brute-force: follow the paths determined by whether a condition is fulfilled or not given by the workflowEntry and the given part data, and if it's accepted (we reach the A nodes in the picture) then add it.
 For part 2, in order to avoid working directly with the numbers, just work with intervals instead, much in the same way as day 5, but easier today, as we are only looking for distinct "combinations", and the key method to calculate the total number of these is to use [rule of product](https://en.wikipedia.org/wiki/Rule_of_product), which is very natural to think of.
-For instance, an accepted path is one that fulfills `s < 1351, a < 2006, x < 1416` (the very left side) and m must be `1 <= m <= 4000`, which gives the intervals `s: [1, 1350], a: [1, 2005], x: [1, 1415], m: [1, 4000]`, so the number of distinct combinations for this path naturally is `$1350 * 2005 * 1415 * 4000 = 1.5320205e+13$`. As can be seen, there are some off-by-one errors that are easy to make if not cautious, but other than that the principle that the algorithm builds on is very intuitive and nothing fancy.
+For instance, an accepted path is one that fulfills `s < 1351, a < 2006, x < 1416` (the very left side) and m must be `1 <= m <= 4000`, which gives the intervals `s: [1, 1350], a: [1, 2005], x: [1, 1415], m: [1, 4000]`, so the number of distinct combinations for this path naturally is $1350 * 2005 * 1415 * 4000 = 1.5320205e+13$. As can be seen, there are some off-by-one errors that are easy to make if not cautious, but other than that the principle that the algorithm builds on is very intuitive and nothing fancy.
 This makes it so that the code only needs to find all accepted states, calculate the permutations and add them up. 
 
 Also, should say the get_all_accepted() method is very ugly recursive function, as I had to add the negation of the conditions for part 2, but couldn't find an elegant way of doing this, thus had to work with two lists. In short, c list is to keep track of negated conditions in addition to the current path, e.g `s < 1351` becomes `s > 1350` when iterating through a workflow list, and the candidate list is to try potential paths that may result in accepted.
