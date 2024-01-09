@@ -6,11 +6,15 @@ from configparser import ConfigParser
 import argparse
 
 
-def run(module, input_type, file_name):
+def run(module, input_type, diff_samples, file_name):
     for i in ["p1", "p2"]:
+        f_name = file_name
         if not hasattr(module, i):
             continue
-        with open(file_name, 'r') as f:
+        if diff_samples:
+            f_name = f_name.replace('.', '1.') if i == 'p1' else f_name.replace('.', '2.')
+
+        with open(f_name, 'r') as f:
             func = getattr(module, i)
             start = time()
             solution = func(f)
@@ -42,37 +46,40 @@ def main():
     parser = argparse.ArgumentParser(description="Aoc23")
     parser.add_argument('--year', '-y', type=int, default=2023, help='Year to run')
     parser.add_argument('--day', '-d', type=int, default=19, help='Year to run')
-    parser.add_argument('--input_type', '-i', action=argparse.BooleanOptionalAction,
-                        help='To run only sample or both sample and original')
+    parser.add_argument('--samples', '-s', action=argparse.BooleanOptionalAction,
+                        help='To run samples')
+    parser.add_argument('--original', '-o', action=argparse.BooleanOptionalAction,
+                        help='To run original')
+    parser.add_argument('--diff_samples', '-ds', action=argparse.BooleanOptionalAction,
+                        help='To run different samples for part 1 and 2')
     args = parser.parse_args()
     config = ConfigParser()
     config.read('scraping.ini')
 
     to_scrape = config.getboolean('MAIN', 'Scrape')
     input_dir = "input"
-    day = args.day
+    day = '0' + str(args.day) if args.day < 10 else args.day
     year = args.year
-    original = args.input_type
     file_name = os.path.join(input_dir, f"day{day}.txt")
     file_name_sample = os.path.join(input_dir, f"day{day}sample.txt")
 
     # only downloads once and then caches the downloaded file in the input folder of the root project
     if to_scrape:
-        get_input.download_input(day, file_name, input_dir)
-        get_input.download_sample_input(day, file_name_sample, input_dir)
+        get_input.download_input(args.day, file_name, input_dir)
+        get_input.download_sample_input(args.day, file_name_sample, input_dir)
 
     # dynamically import a file and run it
     module_name = f"days.day{day}"
     module = import_module(module_name)
-    print(f"day {day}")
-    run(module, "sample", file_name_sample)
-    if original:
+    print(f"day {args.day}")
+    if args.samples:
+        run(module, "sample", args.diff_samples, file_name_sample)
+    if args.original:
         reload(module)
-        run(module, "original", file_name)
+        run(module, "original", False, file_name)
 
 
 if __name__ == "__main__":
     main()
 
 # TODO: run all days option or run a subset of days
-# TODO: time also includes time for parsing

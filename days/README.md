@@ -305,17 +305,38 @@ A is accepted and R refused. The left side of any subtree constitutes the condit
 With this in mind, part 1 was just straightforward brute-force: follow the paths determined by whether a condition is fulfilled or not given by the workflowEntry and the given part data, and if it's accepted (we reach the A nodes in the picture) then add it.
 For part 2, in order to avoid working directly with the numbers, just work with intervals instead, much in the same way as day 5, but easier today, as we are only looking for distinct "combinations", and the key method to calculate the total number of these is to use [rule of product](https://en.wikipedia.org/wiki/Rule_of_product), which is very natural to think of.
 For instance, an accepted path is one that fulfills `s < 1351, a < 2006, x < 1416` (the very left side) and m must be `1 <= m <= 4000`, which gives the intervals `s: [1, 1350], a: [1, 2005], x: [1, 1415], m: [1, 4000]`, so the number of distinct combinations for this path naturally is $1350 * 2005 * 1415 * 4000 = 1.5320205e+13$. As can be seen, there are some off-by-one errors that are easy to make if not cautious, but other than that the principle that the algorithm builds on is very intuitive and nothing fancy.
-This makes it so that the code only needs to find all accepted states, calculate the permutations and add them up. 
+This makes it so that the code only needs to find all accepted states, calculate the "combinations" and add them up. 
 
 Also, should say the get_all_accepted() method is very ugly recursive function, as I had to add the negation of the conditions for part 2, but couldn't find an elegant way of doing this, thus had to work with two lists. In short, c list is to keep track of negated conditions in addition to the current path, e.g `s < 1351` becomes `s > 1350` when iterating through a workflow list, and the candidate list is to try potential paths that may result in accepted.
 The reason to keep the lists apart is to not pollute the current path with candidate workflow names that don't result in accepted, that's the gist of it.
 
-All in all, very intuitive to design a solution, but annoying to implement because of the potential by-one-off errors.
+All in all, very intuitive to design a solution, but annoying to implement because of the potential off-by-one errors.
 
 ---
 
 ## Day 20
 
+I went full OO on this day as it was such an obvious OO problem (although, could have used dictionaries for the modules instead). Part 1, despite being long with some requirements, was still straightforward to solve with OO. I didn't have to think much other than following the requirements, and also seeing how the order of the pulses could be directly replicated with a queue made it easy to code the simulation of the runs.
+Part 2 wasn't as obvious, but having done day 8, I directly thought of using [lcm](https://en.wikipedia.org/wiki/Least_common_multiple) in some way. However, compared to day 8, it wasn't as obvious what exactly I would keep track of, so once again I needed to look at the input data in hopes of finding some pattern I could use for lcm. 
+
+So, in my case the rx module was connected by df conjunction module.
+For a conjunction module to emit low pulse it has to basically receive high pulses from all the modules sending to it, meaning that I needed to look at the modules connected to the df conjunction module. 
+As can be seen in the code and the input gp, ln, xp and xl where the only modules connected to df, and they all were conjunction modules as well. This means that they all needed to send high at the same time in order for df to send a low pulse.
+As in day 8, I assumed that there weren't any start offset in the cycles, so I just counted the number of button presses similar to how I counted the steps on day 8. This turned out to be no more than 4057 button presses (less for the other modules), so it terminated sufficiently fast, less than 1 second, and gave the correct answer by running it on lcm.  
+
+Luckily there weren't any offsets (otherwise I think that [CRT](https://en.wikipedia.org/wiki/Chinese_remainder_theorem) would have been required), and there weren't any complex cycle patterns, so this day was in a way a repeat of day 8 with a little twist.
+
+What I learned:
+* A greater appreciation for dataclasses, because of how much boilerplate it reduces.
+* Learned that you have to be careful with inheriting from a parent class that has default fields, while deriving classes have non-defaults and defaults, because of the order attributes in classes are read (from top to bottom), all deriving classes must also have default values as attributes.
+This can be resolved by setting kw_only=True in conjunction with dataclass or in field(). Although in this case I luckily didn't encounter this situation, so the places I put kw_only is not really necessary.
+* Use default_factory in field() on attribute you want to have mutatable default values such as dictionary or list.
+
+---
+
+## Day 21
+
 
 
 ---
+

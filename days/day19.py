@@ -2,6 +2,7 @@ import operator
 import re
 from copy import deepcopy
 import math
+from dataclasses import dataclass
 
 """Similar to day 5 part 2, work with intervals + rule of product + watch out for off-by-one errors
 Also, funny note, but the regex wasn't meant to work for workflow name e.g "in", only for the workflow entries, but it
@@ -9,27 +10,17 @@ worked, so I just extracted the correct position and called it a day for the inp
 """
 
 
+@dataclass
 class Rule:
     val: int
     category: str
     op: operator  # operator op(a,b) means a op b, e.g a < b
 
-    def __init__(self, val, category, op):
-        self.val = val
-        self.category = category
-        self.op = op
 
-    def __str__(self):
-        return f"val: {self.val}, category: {self.category}, op: {self.op}"
-
-
+@dataclass
 class WorkFlowEntry:
     rule: Rule
     destination: str
-
-    def __init__(self, rule, dest):
-        self.rule = rule
-        self.destination = dest
 
     def check_rule(self, categories):
         if self.rule:
@@ -38,9 +29,6 @@ class WorkFlowEntry:
             else:
                 return False
         return self.destination
-
-    def __str__(self):
-        return f"rule: {self.rule}, destination: {self.destination}"
 
 
 def parse(f):

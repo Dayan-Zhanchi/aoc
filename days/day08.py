@@ -23,7 +23,6 @@ def parse(f):
 
 def p1(f):
     instructions, network = parse(f)
-
     steps = 0
     current_node = 'AAA'
     while True:
@@ -38,7 +37,6 @@ def p1(f):
 
 def p2(f):
     instructions, network = parse(f)
-
     steps = 0
     current_nodes = [node for node in network if node[-1] == 'A']
     steps_found_z = []

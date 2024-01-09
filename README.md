@@ -1,10 +1,11 @@
 # Advent of code 2023
 My solutions to aoc23. Code quality is non-existent here, I'm just trying to solve the problem with the approaches I come up with, mostly brute-force. I do minimal OO to avoid the boilerplates. I code mostly in imperative style, as that's what I'm used to.
-For more elaborate thoughts and high-level explanations of my solutions you can find it in [days](days) folder. For a dumb aoc folder, I'm being overly verbose with explaining things and providing instructions here, but oh well, better be proper in case someone ever wants to run the code.
+For more elaborate thoughts and high-level explanations of my solutions you can find it in [days](days) folder. For a dumb aoc folder, I'm being overly verbose with explaining things and providing instructions here, but oh well, better be proper in case someone ever wants to run the code. However, more importantly it's mostly for myself in case I ever go back to it.
 
 # Input data
 Note that the input folder is not included, as it seems to not be allowed according to aoc [policy](https://adventofcode.com/2023/about). So you will have to add it yourself in the root project as a folder named input.
 Files added in the input folder should be named as `day<day_number>.txt` and `day<day_number>sample.txt` for the original input and sample input respectively. Note that if you are running the scraper, then the original input will be automatically added to the input folder along with the input folder if it doesn't exist. Currently, the sample input is not downloaded automatically and have to be added manually.
+Also, if samples differ for part 1 vs part 2, then include them as `day<day_number>sample1.txt` and `day<day_number>sample2.txt` respectively in the input folder and when running the script include -s flag. 
 
 To download the input files automatically from aoc, you need to include a scraping.ini file in the root folder of this project. The format should be:
 ```
@@ -17,6 +18,10 @@ Scrape=True
 [SESSION]
 CookieSessionAOC=<Your-session-cookie>
 ```
+
+# Some anomalies
+* Day 8 needs to be run with -ds flag along with -s if you want to run the samples, as there are designated samples for each part
+* Day 20 part 2 only works with the original input, while part1 works for sample and original input. It's mostly because of how part 2 was meant to be solved.
 
 # How to run
 Run pip install like so `pip install -r requirements.txt`.
@@ -32,7 +37,9 @@ Run main.py with the correct year, day and whether you want to use sample + orig
 
 # Flags
 ```
---y             # year of aoc
---d             # day of aoc problem
---i             # input type, set to True if included, meaning to run both sample + original input, otherwise if not included only sample input
+-y             # year of aoc
+-d             # day of aoc problem
+-s             # sample input, set to True if included, meaning to run sample input
+-o             # original input, set to True if included, meaning to run original input
+-ds            # different samples, set to True if included, meaning to run different samples for part 1 and 2
 ```

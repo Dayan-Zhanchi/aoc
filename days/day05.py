@@ -1,6 +1,6 @@
 import re
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 """Cancer solution, but worked with intervals as tuples instead of ranges (as lists) as the latter sounded infeasible 
 in python given the input, so had to watch out for alot of off-by-one error mistakes. The approach I went with was to 
@@ -21,11 +21,9 @@ class MapEntry:
     source_end: int
 
 
+@dataclass
 class Map:
-    entries: [MapEntry]
-
-    def __init__(self):
-        self.entries = []
+    entries: [MapEntry] = field(default_factory=list, kw_only=True)
 
 
 def parse(f):
