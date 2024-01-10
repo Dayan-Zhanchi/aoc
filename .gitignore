@@ -3,6 +3,7 @@ scraping.ini
 test.py
 test.txt
 input
+__pycache__/
 
 # IntelliJ
 .idea

@@ -31,9 +31,9 @@ def time_conversion(time):
     mm, ss = divmod(time, 60)
     hh, mm = divmod(mm, 60)
     if hh > 0:
-        return f"{hh}h:{mm}m:{ss}s"
+        return f"{hh:.0f}h:{mm:.0f}m:{ss:.0f}s"
     elif mm > 0:
-        return f"{mm}m:{ss}s"
+        return f"{mm:.0f}m:{ss:.0f}s"
     elif ss1 > 0:
         return f"{time:.2f}s"
     elif ms1 > 0:

@@ -4,6 +4,8 @@ from enum import Enum, auto
 from collections import defaultdict
 import math
 
+# part 1 straightforward OO implementation and part 2 similar to day 8
+
 
 class PulseType(Enum):
     LOW = auto()
@@ -123,8 +125,7 @@ def p2(f):
     button_pushes = 0
     modules_to_track = ['gp', 'ln', 'xp', 'xl']
     track_counts = {'gp': 0, 'ln': 0, 'xp': 0, 'xl': 0}
-    tracked = {'gp': False, 'ln': False, 'xp': False, 'xl': False}
-    while not all([v for _, v in tracked.items()]):
+    while not all([v != 0 for _, v in track_counts.items()]):
         q = broadcaster.out()
         button_pushes += 1
         while q:
@@ -132,9 +133,8 @@ def p2(f):
             output = mother_module[curr_pulse.receiver].out(curr_pulse) \
                 if curr_pulse.receiver in mother_module else None
             if (output and curr_pulse.sender in modules_to_track and curr_pulse.receiver == 'df' and
-                    curr_pulse.type == PulseType.HIGH and not tracked[curr_pulse.sender]):
+                    curr_pulse.type == PulseType.HIGH and not track_counts[curr_pulse.sender]):
                 track_counts[curr_pulse.sender] = button_pushes
-                tracked[curr_pulse.sender] = True
             if not output:
                 continue
             q = [*q, *output]

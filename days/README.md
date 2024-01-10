@@ -336,6 +336,15 @@ This can be resolved by setting kw_only=True in conjunction with dataclass or in
 
 ## Day 21
 
+I cheesed it this day, as I already knew what to do because I had already seen the memes. Part 1 is trivial, just use BFS or some other way of adding the coordinates. Instead of using a queue I used sets to avoid O(n) for checking for duplicates, I don't really think it mattered. So, like a BFS I look at all possible directions of a given coordinate and add them into the set.
+For part 2 I knew the magical number of 65 (to reach the diamond shape) and gathering 65 + 131 and 65 + 131 * 2 to calculate the quadratic equation by using [lagrange interpolation polynomial](https://en.wikipedia.org/wiki/Lagrange_polynomial), or one could also use [vandermonde matrix](https://en.wikipedia.org/wiki/Vandermonde_matrix) to solve it.
+There's alot to say about how people came up with the numbers and also there are different ways of solving it too, but I don't think I understand it enough (or maybe I'm currently, as of writing this right now, am just lazy to try to understand it) to explain it here.
+So instead I'll refer to [this](https://www.reddit.com/r/adventofcode/comments/18ofc8i/2023_day_21_part_2_intuition_behind_solution/) by Thomasjevskij, if future me one day wants to understand this.
+
+---
+
+## Day 22
+
 
 
 ---

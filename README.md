@@ -1,5 +1,5 @@
 # Advent of code 2023
-My solutions to aoc23. Code quality is non-existent here, I'm just trying to solve the problem with the approaches I come up with, mostly brute-force. I do minimal OO to avoid the boilerplates. I code mostly in imperative style, as that's what I'm used to.
+My solutions to aoc23. Code quality is non-existent here, I'm just trying to solve the problem with the approaches I come up with, mostly brute-force and or naive. I call it naive because most part 2 can't be solved with brute force, but most of them also don't require sophisticated algortihms to solve. I do minimal OO to avoid the boilerplates and I code mostly in imperative style, as that's what I'm used to.
 For more elaborate thoughts and high-level explanations of my solutions you can find it in [days](days) folder. For a dumb aoc folder, I'm being overly verbose with explaining things and providing instructions here, but oh well, better be proper in case someone ever wants to run the code. However, more importantly it's mostly for myself in case I ever go back to it.
 
 # Input data
@@ -19,14 +19,14 @@ Scrape=True
 CookieSessionAOC=<Your-session-cookie>
 ```
 
-# Some anomalies
+# Some exceptions
 * Day 8 needs to be run with -ds flag along with -s if you want to run the samples, as there are designated samples for each part
 * Day 20 part 2 only works with the original input, while part1 works for sample and original input. It's mostly because of how part 2 was meant to be solved.
 
 # How to run
 Run pip install like so `pip install -r requirements.txt`.
 
-Run main.py with the correct year, day and whether you want to use sample + original input `py main.py -y 2023 -d 5 -i` and something like this will print out:
+Run main.py with the correct year, day and whether you want to use sample + original input `py main.py -y 2023 -d 5 -s -o` and something like this will print out:
  ```
  day 5
  input type: sample, part: p1, solution: 35, time: 0.00000 ms
