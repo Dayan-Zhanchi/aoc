@@ -337,13 +337,44 @@ This can be resolved by setting kw_only=True in conjunction with dataclass or in
 ## Day 21
 
 I cheesed it this day, as I already knew what to do because I had already seen the memes. Part 1 is trivial, just use BFS or some other way of adding the coordinates. Instead of using a queue I used sets to avoid O(n) for checking for duplicates, I don't really think it mattered. So, like a BFS I look at all possible directions of a given coordinate and add them into the set.
-For part 2 I knew the magical number of 65 (to reach the diamond shape) and gathering 65 + 131 and 65 + 131 * 2 to calculate the quadratic equation by using [lagrange interpolation polynomial](https://en.wikipedia.org/wiki/Lagrange_polynomial), or one could also use [vandermonde matrix](https://en.wikipedia.org/wiki/Vandermonde_matrix) to solve it.
-There's alot to say about how people came up with the numbers and also there are different ways of solving it too, but I don't think I understand it enough (or maybe I'm currently, as of writing this right now, am just lazy to try to understand it) to explain it here.
-So instead I'll refer to [this](https://www.reddit.com/r/adventofcode/comments/18ofc8i/2023_day_21_part_2_intuition_behind_solution/) by Thomasjevskij, if future me one day wants to understand this.
+For part 2 I knew the magical number of 65 steps (to reach the diamond shape) and the two additional steps 65 + 131 and 65 + 131 * 2. So, I simply just input these steps into the method from part 1 to retrieve the number of garden plots. These numbers were then used to calculate the quadratic equation by using [lagrange interpolation polynomial](https://en.wikipedia.org/wiki/Lagrange_polynomial) or [vandermonde matrix](https://en.wikipedia.org/wiki/Vandermonde_matrix).
+There's alot to say about how people came up with the numbers, but I don't think I understand it enough (or maybe I'm just too lazy to try to understand it right now) to explain it here.
+So instead I'll refer to [this](https://www.reddit.com/r/adventofcode/comments/18ofc8i/2023_day_21_part_2_intuition_behind_solution/) by Thomasjevskij, if future me one day wants to understand it.
 
 ---
 
 ## Day 22
+
+Fun day, I've never implemented a Jenga-like puzzle before, so was cool to see that it's not that hard (although this is very simplified). However, I think my implementation needs some explanations, as I think I overcomplicated it.
+
+The objects:
+* Used a zero 3D numpy array as a state array to keep track of where the bricks moved. Stored non-zero ID on the coordinates that the bricks occupied, so they were duplicated. This was something I had to watch out for later.
+* A dictionary for bricks in case I needed fast lookup
+* A list of all the bricks
+* Stored x,y,z coords as tuples in sand brick objects, ID and bricks that supported them. I thought it was strange to store the coords as tuples, but couldn't figure out a better alternative, as one of the coords is always a tuple because of its length, so I didn't want to store the full coordinates in a list. For instance x=(0,2), y=(1,1), z=(2,2), if stored as full coordinates would be [(0,1,2), (1,1,2), (2,1,2)],
+which is much more verbose than storing them as tuples. I think the reason I went with tuples was because numpy arrays can accept tuples as indices to extract entries in a numpy array, and if there is a range, which there is in this case, x=(0,2), I could just use range(0,2+1) to get the correct indices for that axis. So the full extraction of the brick from the 3D array, let's call it grid, would be `grid[range(0,2+1), 1, 2]`.
+
+***Moving the bricks*** 
+
+Store the snapshot of the bricks positions in the 3D array and let each brick fall down. A brick moves as far down in the z-axis as possible until it makes contact with another brick.
+Bricks that are on z=1 are already settled. I sort the bricks in ascending order, as that makes it so much easier to figure out their final positions, because bricks closest to the ground, if not already on the ground, are the ones that settles first. 
+At each z-level, bricks that are at the same z-level will not bump into each other when falling per the problem description. That means that the order in which bricks at a given level are considered does not matter, only thing that matters is that they are iterated in ascending order w.r.t the z-axis.
+When a brick has settled remove it's original position in the 3D grid and add the new position by populating the coordinates by its id. Also a brick that has settled can store the bricks immediately underneath it in the supported_by attribute, to keep track of bricks that supports it. This will be helpful for part 1.   
+I also count the number of bricks that fell, but that is only relevant for part 2.
+
+***Part 1***
+
+Counting the bricks that don't cause any falling is done by considering all bricks one z-level **above** the given brick that are in contact with it and checking that they **all** are supported by **more than one brick**. That way if the given brick is to be removed the ones on top of it won't fall.
+If there are no bricks above the given brick, then naturally it can be removed. All this is made possible with ease because I keep track of bricks that supports a brick. That's pretty much part 1.
+
+***Part 2***
+
+Initially I was thinking of some contrived way to make use of the supported_by attribute in the sand bricks, but realized it would be pain to simulate the chain reaction. So I went with a brute force approach: for each brick, remove it from the grid and let all the bricks settle, count how many falls and that will be the desired number for a brick. Do this for every brick and add the numbers together.
+That's all. It's undoubtedly slow, 40s, but it's such an easy implementation compared to trying to make supported_by approach work, which I'm not sure how. 
+
+---
+
+## Day 23
 
 
 
