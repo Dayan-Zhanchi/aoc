@@ -376,7 +376,18 @@ That's all. It's undoubtedly slow, 40s, but it's such an easy implementation com
 
 ## Day 23
 
+Absolute shitshow of a day and code (many duplications). Part 1 was easy, straightforward DFS, keep track of path length for each possible path taken to the end, and make sure to remove the vertex in the correct order after the recursive call, so we can backtrack properly.
+Part 2 was trickier, longest path problem for an undirected general graph is [NP-hard](https://en.wikipedia.org/wiki/Longest_path_problem), so there's no polynomial time solution. So the easy way is to just brute-force it again with DFS but with some smart tricks. I ran it while thinking of a solution, but by the time I had a solution (a few hours later) it was still running, so the naive DFS wouldn't work on, at least on python.
+What I realized was that the paths in the grid resembled long corridors with junctions. So I just compressed the graph, only keeping the start, end, junctions and the edge cost to reach the junctions. This would give a graph with only 35 nodes to work with compared to 9400 nodes. I used a simple BFS to visit all paths and create edges in an adjacency list. The BFS method was a bit tricky for me as I never found the
+bug which caused it to never end. I mitigated this by adding a max iter condition, as I suspected that it was working correctly but for some strange reason got stuck in a cycle (?) towards the end. Also, I realized that I never added the end node, so I had to do this manually, by COUNTING the nodes to the last junction. This was so dumb, but it worked in the end. I will have to come back to this one sometime in the future to fix the bug.
 
 
 ---
+
+## Day 24
+
+
+
+---
+
 

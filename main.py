@@ -59,7 +59,7 @@ def main():
     to_scrape = config.getboolean('MAIN', 'Scrape')
     input_dir = "input"
     day = '0' + str(args.day) if args.day < 10 else args.day
-    year = args.year
+    year = args.year  # currently not used, will change this if I do more aoc in the future
     file_name = os.path.join(input_dir, f"day{day}.txt")
     file_name_sample = os.path.join(input_dir, f"day{day}sample.txt")
 

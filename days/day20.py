@@ -123,7 +123,6 @@ def p2(f):
     mother_module = parse(f)
     broadcaster = mother_module['broadcaster']
     button_pushes = 0
-    modules_to_track = ['gp', 'ln', 'xp', 'xl']
     track_counts = {'gp': 0, 'ln': 0, 'xp': 0, 'xl': 0}
     while not all([v != 0 for _, v in track_counts.items()]):
         q = broadcaster.out()
@@ -132,7 +131,7 @@ def p2(f):
             curr_pulse = q.pop(0)
             output = mother_module[curr_pulse.receiver].out(curr_pulse) \
                 if curr_pulse.receiver in mother_module else None
-            if (output and curr_pulse.sender in modules_to_track and curr_pulse.receiver == 'df' and
+            if (output and curr_pulse.sender in track_counts and curr_pulse.receiver == 'df' and
                     curr_pulse.type == PulseType.HIGH and not track_counts[curr_pulse.sender]):
                 track_counts[curr_pulse.sender] = button_pushes
             if not output:

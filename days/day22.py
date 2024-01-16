@@ -36,7 +36,19 @@ def parse(f):
 def p1(f):
     grid, sand_bricks_snapshot, sand_bricks_fast_lookup = parse(f)
     grid_settled, _ = settle_bricks(deepcopy(grid), sand_bricks_snapshot)
-    return calculate_disintegratables(grid_settled, sand_bricks_snapshot, sand_bricks_fast_lookup)
+    disintegrated = 0
+    for brick in sand_bricks_snapshot:
+        # always check directly above
+        # don't care about getting entire range of z vertical, just need to know the sand cube directly above it on the z-axis
+        # so for vertical only the very end is relevant, but for non-vertical the start and end is the same
+        ids = get_ids(grid_settled, brick.x, brick.y, (brick.z[1] + 1, brick.z[1] + 1))
+        if len(ids) == 0:
+            disintegrated += 1
+        else:
+            if all([len(sand_bricks_fast_lookup[i].supported_by) > 1 for i in ids]):
+                disintegrated += 1
+
+    return disintegrated
 
 
 # slow 40s
@@ -65,26 +77,6 @@ def p2(f):
     return number_of_falling_bricks
 
 
-def calculate_disintegratables(grid_settled, sand_bricks_settled, sand_bricks_fast_lookup):
-    disintegrated = 0
-    legit_bricks = []
-    for brick in sand_bricks_settled:
-        # always check directly above
-        z = brick.z
-        # don't care about getting entire range of z vertical, just need to know the sand cube directly above it on the z-axis
-        # so for vertical only the very end is relevant, but for non-vertical the start and end is the same
-        ids = get_ids(grid_settled, brick.x, brick.y, (z[1] + 1, z[1] + 1))
-        if len(ids) == 0:
-            disintegrated += 1
-            legit_bricks.append(brick.id)
-        else:
-            if all([len(sand_bricks_fast_lookup[i].supported_by) > 1 for i in ids]):
-                disintegrated += 1
-                legit_bricks.append(brick.id)
-
-    return disintegrated
-
-
 def settle_bricks(grid, sand_bricks_falling):
     bricks_that_fell = 0
     for brick in sand_bricks_falling:
@@ -92,7 +84,7 @@ def settle_bricks(grid, sand_bricks_falling):
             continue
 
         # let the brick fall
-        x, y, z = brick.x, brick.y, brick.z
+        z = brick.z
         while z[0] > 1:
             ids = get_ids(grid, brick.x, brick.y, (z[0] - 1, z[0] - 1))
             if any(ids):
@@ -105,10 +97,8 @@ def settle_bricks(grid, sand_bricks_falling):
             bricks_that_fell += 1
 
         grid[*get_index_coord(brick.x, brick.y, brick.z)] = 0  # remove the brick from its original pos
-        grid[*get_index_coord(x, y, z)] = brick.id  # populate the new positions with brick id
+        grid[*get_index_coord(brick.x, brick.y, z)] = brick.id  # populate the new positions with brick id
         # set brick to its new pos
-        brick.x = (x[0], x[1])
-        brick.y = (y[0], y[1])
         brick.z = (z[0], z[1])
 
     return grid, bricks_that_fell
