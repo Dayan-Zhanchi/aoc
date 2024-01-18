@@ -2,6 +2,20 @@
 My solutions to aoc23. Code quality is non-existent here, I'm just trying to solve the problem with the approaches I come up with, mostly brute-force and or naive. I call it naive because most part 2 can't be solved with brute force, but most of them also don't require sophisticated algortihms to solve. I do minimal OO to avoid the boilerplates and I code mostly in imperative style, as that's what I'm used to.
 For more elaborate thoughts and high-level explanations of my solutions you can find it in [days](days) folder. For a dumb aoc folder, I'm being overly verbose with explaining things and providing instructions here, but it's mostly for myself in case I ever go back to it.
 
+
+## Background
+I've never really tried aoc before. I remember back in 2018-2019 I only ever did a few problems before flat out
+giving up. This year I wanted to commit to it and see it through, and although there were some painful moments, such as
+day 17 where I couldn't get my Dijkstra to work no matter what I did, or solving the DP problem on day 12, or solving the
+equation system in day 24 part 2, I'm glad I stuck with it and finished at the end. After all, aoc is what you make it
+to be, and I guess I wanted to see what I was capable of and hopefully learn something in the process. Now I know I suck
+at DP and the more mathy problems, so that's probably something I'll have to work on in the future.
+
+Even though I needed some hints/help on some days and the fact that my solutions are far from perfect or even remotely
+elegant, I guess I will just take comfort in what Terence Tao once said:
+
+> It is not so much whether you succeed or fail an equation, it is whether you can learn something from it.
+
 ## Input data
 Note that the input folder is not included, as it seems to not be allowed according to aoc [policy](https://adventofcode.com/2023/about). So you will have to add it yourself in the root project as a folder named input.
 Files added in the input folder should be named as `day<day_number>.txt` and `day<day_number>sample.txt` for the original input and sample input respectively. Note that if you are running the scraper, then the original input will be automatically added to the input folder along with the input folder if it doesn't exist. Currently, the sample input is not downloaded automatically and have to be added manually.
@@ -24,6 +38,7 @@ CookieSessionAOC=<Your-session-cookie>
 * Day 8 needs to be run with -ds flag along with -s if you want to run the samples, as there are designated samples for each part
 * Day 20 part 2 only works with the original input, while part1 works for sample and original input. It's mostly because of how part 2 was meant to be solved.
 * Day 24 part 1 lower and upper limit in p1 method has to be toggled depending on whether sample is running or original input. 
+* Day 25, because of the manual way I solved it, the removal of edges have to be alternated depending on whether sample or original input is run.
 
 **Running time**
 

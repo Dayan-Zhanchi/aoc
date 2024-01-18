@@ -38,20 +38,42 @@ def compress_graph(grid, r, c):
             if (cx, cy) not in visited:
                 q.append((cx, cy, path_len + 1, visited, jx, jy))
         iter += 1
-    return grid, edges, r, c
+
+    # another BFS to find the length between the end and the closest junction to it
+    q = [(r, c)]
+    visited = set()
+    path_len = 0
+    jx, jy = 0, 0
+    while q:
+        x, y = q.pop(0)
+        if (x, y) in visited:
+            continue
+
+        visited.add((x, y))
+        neighbors = get_neighbors(grid, x, y, 2)
+        if len(neighbors) > 2:
+            # found it
+            jx = x
+            jy = y
+            break
+        for cx, cy, _ in neighbors:
+            if (cx, cy) not in visited:
+                path_len += 1
+                q.append((cx, cy))
+    return grid, edges, r, c, (jx, jy, path_len)
 
 
-def p1(f):
-    grid, r, c = parse(f, 1)
-    return dfs(grid, r, c, 0, 1, set(), 0, 1)
+# def p1(f):
+#     grid, r, c = parse(f, 1)
+#     return dfs(grid, r, c, 0, 1, set(), 0, 1)
 
 
 # slow 50s
 def p2(f):
-    grid, edges, r, c = parse(f, 2)
-    edges[(r, c)].add((129, 125, 121))
-    edges[(129, 125)].add((r, c, 121))
-    return dfs(edges, r, c, 0, 1, set(), 0, 2)
+    grid, edges, r, c, jx, jy, path_len = parse(f, 2)
+    edges[(r, c)].add((jx, jy, path_len))
+    edges[(jx, jy)].add((r, c, path_len))
+    # return dfs(edges, r, c, 0, 1, set(), 0, 2)
 
 
 def dfs(graph, r, c, x, y, visited, curr_path_len, part):

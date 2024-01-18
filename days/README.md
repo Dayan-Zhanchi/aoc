@@ -573,6 +573,9 @@ end node, or more specifically because of the bug the end node was never added, 
 COUNTING the nodes to the last junction. This was so dumb, but it worked in the end. I will have to come back to this
 one sometime in the future to fix the bug.
 
+Came back to this to fix the manual counting by using bfs to get the path length between the ending node and the nearest
+junction to it.
+
 
 ---
 
@@ -601,32 +604,32 @@ and t (not the example above), it would look like this (a rough sketch):
 
 ![Intersection of two paths](../doodles/intersection_of_traces_of_paths.png)
 
-where we can see that the intersection points of the blue line sits on the same x position as the two lines, but at 
+where we can see that the intersection points of the blue line sits on the same x position of the two lines, but at 
 different time units.
 
 Now using this idea we get the linear equation system below for two stones, and note that we are only working in 
 $\mathbb{R}^2$ per the puzzle description:
 
 ```math
-\begin{aligned*}
+\begin{aligned}
 x_n + v_{xn}t_n & = x_{n1} \iff x_{n1} - v_{xn}t_n & = x_n \\
 y_n + v_{yn}t_n & = y_{n1} \iff y_{n1} - v_{yn}t_n & = y_n \\
 x_m + v_{xm}t_m & = x_{m1} \iff x_{m1} - v_{xm}t_m & = x_m \\
 y_m + v_{ym}t_m & = y_{m1} \iff y_{m1} - v_{ym}t_m & = y_m
-\end{aligned*}
+\end{aligned}
 ```
 
-where x_n,y_n and x_m,y_m is the starting position for each respective rock, v_xn,vy_n and v_xm,v_ym the velocity for
-each rock, t_n,t_m the time elapsed for each rock (which may not be the same) and x_n1,y_n1 and x_m1,y_m1 the new
-positions of the rocks after their elapsed time. The idea is that the position has to be the same for both stones at
+where x_n,y_n and x_m,y_m is the starting position for stone n and m, v_xn,vy_n and v_xm,v_ym the velocity for stone 
+n and m, t_n,t_m the time elapsed for the two stones respectively (which may not be the same) and x_n1,y_n1 and x_m1,y_m1 the new
+positions of the stones after their elapsed time. The idea is that the position has to be the same for both stones at
 some point in time, but it doesn't have to be ***at the same time***.
 
 I then turn this into a coefficient matrix where each row is in the general form of x_k, y_k, t_n, t_m and where k is
-n1 for the first 2 rows and m1 for the last 2 rows. Furthermore, first 2 rows is for the first stone x and y coordinates
+n1 for the first 2 rows and m1 for the last 2 rows. Furthermore, first 2 rows is for the first stone's x and y coordinates
 and the last 2 rows for the second stone's x and y coordinates, basically listing the coefficients in the same order as
 the linear equation system above. Below is an augmented matrix of the above linear system.
 
-```
+```math
 \begin{matrix}
 1 0 -t_n 0 x_n \\
 0 1 -t_n 0 y_n \\
@@ -645,15 +648,15 @@ For instance, if we look at the first pair of stones in the sample input we have
 Inputting these into the linear equation and subsequently in the coefficient matrix gives:
 
 ```math
-\begin{aligned*}
+\begin{aligned}
 19 - 2t_n & = x_{n1} \iff x_{n1} - 2t_n & = 19 \\
 13 + t_n & = y_{n1} \iff y_{n1} - t_n & = 13 \\
 18 - t_m & = x_{m1} \iff x_{m1} + t_m & = 18 \\
 19 - t_m & = y_{m1} \iff y_{m1} + t_m & = 19
-\end{aligned*}
+\end{aligned}
 ```
 
-```
+```math
 \begin{matrix}
 1 0 2 0 19 \\
 0 1 -1 0 13 \\
@@ -663,8 +666,8 @@ Inputting these into the linear equation and subsequently in the coefficient mat
 ```
 
 In the code this manifests as coefficient matrix a and resulting vector b, where a is the 4x4 coefficients matrix of
-above and b the last column of the matrix. Iterating through all combinations of pairs of stones and shoving the values
-into np.linalg.solve and then counting how many solutions fulfills the condition of lower and upper limit and also if
+above and b the last column of the matrix. Iterating through all combinations of pairs of stones, shoving the values
+into np.linalg.solve, counting how many solutions fulfills the condition of lower and upper limit and also if
 the time elapsed are positive (don't want negative because that means it was in the past) will give the answer to
 part 1.
 
@@ -678,11 +681,11 @@ has to be the exact same at the same time for a given stone and the stone we thr
 following equation system
 
 ```math
-\begin{aligned*}
+\begin{aligned}
 x_n + v_{xn}t_n & = x_s + v_{xs}t_n \\
 y_n + v_{yn}t_n & = y_s + v_{ys}t_n \\
 z_n + v_{zn}t_n & = z_s + v_{zs}t_n
-\end{aligned*}
+\end{aligned}
 ```
 
 Moving the expressions to one side and then input it into sympy.solve returned the correct answer. Doing this for all 
@@ -692,8 +695,30 @@ the data is too slow, but people found out that it suffices to do it for the fir
 
 ## Day 25
 
+From the problem description this sounds like a typical [min-cut](https://en.wikipedia.org/wiki/Minimum_cut) problem,
+but instead I cheesed the hell out of this by visualizing the graph and manually finding the edges that would cut the 
+graph into two separate components. Networkx has a nice built-in drawing graph function, so it was easy to do the
+visualization, just call nx_draw().
 
+![graphviz](../doodles/day25graph.png)
+
+From the picture it can be seen that the edges we are looking for are `{rrl, pcs}, {lcm, ddl}, {qnd, mbk}`. So just
+remove these edges from the graph and multiply the number of the nodes in the two components, that's the answer.
+
+As this was the first year I've ever completed aoc, I was genuinely surprised to see that 
+there was only one star for the final day. That was a nice fitting Christmas gift at the end of aoc. 
 
 ---
 
+## Final thoughts
+I've never really tried aoc before. I remember back in 2018-2019 I only ever did a few problems before flat out
+giving up. This year I wanted to commit to it and see it through, and although there were some painful moments, such as
+day 17 where I couldn't get my Dijkstra to work no matter what I did, or solving the DP problem on day 12, or solving the 
+equation system in day 24 part 2, I'm glad I stuck with it and finished at the end. After all, aoc is what you make it
+to be, and I guess I wanted to see what I was capable of and hopefully learn something in the process. Now I know I suck 
+at DP and the more mathy problems, so that's probably something I'll have to work on in the future.
 
+Even though I needed some hints/help on some days and the fact that my solutions are far from perfect or even remotely 
+elegant, I guess I will just take comfort in what Terence Tao once said:
+
+> It is not so much whether you succeed or fail an equation, it is whether you can learn something from it.
