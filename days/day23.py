@@ -17,7 +17,7 @@ def parse(f, part):
 def compress_graph(grid, r, c):
     # BFS only keep start, end and junctions
     edges = defaultdict(lambda: set())  # adjacency list
-    q = [(0, 1, 0, set(), 0, 1)]
+    q = [(0, 1, 0, set(), 0, 1)]  # x, y, path length, visited, junction_x, junction_y
     max_iter = 3 * 10 ** 5
     iter = 0
     while q and iter < max_iter:
@@ -34,51 +34,36 @@ def compress_graph(grid, r, c):
             jx, jy = x, y  # new junction point
             path_len = 0  # reset path length for next junction
             visited = deepcopy(visited)
-        for cx, cy in neighbors:
+        for cx, cy, _ in neighbors:
             if (cx, cy) not in visited:
                 q.append((cx, cy, path_len + 1, visited, jx, jy))
         iter += 1
-        # print(f"{iter}: {len(q)}")
     return grid, edges, r, c
 
 
 def p1(f):
     grid, r, c = parse(f, 1)
-    return dfs1(grid, 0, 1, set(), 0)
+    return dfs(grid, r, c, 0, 1, set(), 0, 1)
 
 
 # slow 50s
 def p2(f):
     grid, edges, r, c = parse(f, 2)
-    print(len(edges))
-    print(edges)
     edges[(r, c)].add((129, 125, 121))
     edges[(129, 125)].add((r, c, 121))
-    return dfs2(edges, grid, 0, 1, set(), 0)
+    return dfs(edges, r, c, 0, 1, set(), 0, 2)
 
 
-def dfs1(grid, x, y, visited, curr_path_len):
-    if (x, y) == (len(grid) - 1, len(grid[-1]) - 2):
+def dfs(graph, r, c, x, y, visited, curr_path_len, part):
+    if (x, y) == (r, c):
         return curr_path_len
 
     candidates = 0
-    for cx, cy in get_neighbors(grid, x, y, 1):
+    neighbors = get_neighbors(graph, x, y, 1) if part == 1 else graph[(x, y)]
+    for cx, cy, cost in neighbors:
         if (cx, cy) not in visited:
             visited.add((cx, cy))
-            candidates = max(dfs1(grid, cx, cy, visited, curr_path_len + 1), candidates)
-            visited.remove((cx, cy))
-    return candidates
-
-
-def dfs2(graph, grid, x, y, visited, curr_path_len):
-    if (x, y) == (len(grid) - 1, len(grid[-1]) - 2):
-        return curr_path_len
-
-    candidates = 0
-    for cx, cy, cost in graph[(x, y)]:
-        if (cx, cy) not in visited:
-            visited.add((cx, cy))
-            candidates = max(dfs2(graph, grid, cx, cy, visited, curr_path_len + cost), candidates)
+            candidates = max(dfs(graph, r, c, cx, cy, visited, curr_path_len + cost, part), candidates)
             visited.remove((cx, cy))
     return candidates
 
@@ -91,13 +76,13 @@ def get_neighbors(grid, x, y, part):
                          '.': [np.array([-1, 0]), np.array([0, 1]), np.array([1, 0]), np.array([0, -1])]}
         neighbor_dxdy = neighbor_dxdy[grid[x][y]]
     else:
-        neighbor_dxdy = [np.array([-1, 0]), np.array([0, 1]), np.array([1, 0]), np.array([0, -1])] if grid[x][
-                                                                                                          y] in 'v^<>.' else []
+        neighbor_dxdy = [np.array([-1, 0]), np.array([0, 1]), np.array([1, 0]), np.array([0, -1])] \
+            if grid[x][y] in 'v^<>.' else []
 
     for dxdy in neighbor_dxdy:
         new_x, new_y = np.array([x, y]) + dxdy
         if not is_oob(grid, new_x, new_y) and grid[new_x][new_y] != '#':
-            neighbors.append((new_x, new_y))
+            neighbors.append((new_x, new_y, 1))
     return neighbors
 
 

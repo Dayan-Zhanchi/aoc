@@ -75,7 +75,7 @@ def p2(f):
 
     total_combinations = 0
     for accept in accepted_states:
-        part_combination = {'x': [1, 4000], 'm': [1, 4000], 'a': [1, 4000], 's': [1, 4000]}
+        part_combination = {key: [1, 4000] for key in 'xmas'}
         for entry in accept:
             if entry.rule:
                 curr_interval = part_combination[entry.rule.category]

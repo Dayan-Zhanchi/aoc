@@ -1,6 +1,6 @@
 # Advent of code 2023
 My solutions to aoc23. Code quality is non-existent here, I'm just trying to solve the problem with the approaches I come up with, mostly brute-force and or naive. I call it naive because most part 2 can't be solved with brute force, but most of them also don't require sophisticated algortihms to solve. I do minimal OO to avoid the boilerplates and I code mostly in imperative style, as that's what I'm used to.
-For more elaborate thoughts and high-level explanations of my solutions you can find it in [days](days) folder. For a dumb aoc folder, I'm being overly verbose with explaining things and providing instructions here, but oh well, better be proper in case someone ever wants to run the code. However, more importantly it's mostly for myself in case I ever go back to it.
+For more elaborate thoughts and high-level explanations of my solutions you can find it in [days](days) folder. For a dumb aoc folder, I'm being overly verbose with explaining things and providing instructions here, but it's mostly for myself in case I ever go back to it.
 
 ## Input data
 Note that the input folder is not included, as it seems to not be allowed according to aoc [policy](https://adventofcode.com/2023/about). So you will have to add it yourself in the root project as a folder named input.
@@ -23,10 +23,11 @@ CookieSessionAOC=<Your-session-cookie>
 **Input**
 * Day 8 needs to be run with -ds flag along with -s if you want to run the samples, as there are designated samples for each part
 * Day 20 part 2 only works with the original input, while part1 works for sample and original input. It's mostly because of how part 2 was meant to be solved.
+* Day 24 part 1 lower and upper limit in p1 method has to be toggled depending on whether sample is running or original input. 
 
 **Running time**
 
-As I mostly use naive and brute-force approach, the running times of some problems, especially towards the end of aoc are slow.
+As I mostly use brute-force and or naive approach, the running times of some problems, especially towards the end of aoc are slow.
 * Day 6 $\approx 6s$
 * Day 10 $\approx 1m$
 * Day 12 $\approx 5s$
