@@ -63,9 +63,9 @@ def compress_graph(grid, r, c):
     return grid, edges, r, c, (jx, jy, path_len)
 
 
-# def p1(f):
-#     grid, r, c = parse(f, 1)
-#     return dfs(grid, r, c, 0, 1, set(), 0, 1)
+def p1(f):
+    grid, r, c = parse(f, 1)
+    return dfs(grid, r, c, 0, 1, set(), 0, 1)
 
 
 # slow 50s
@@ -73,7 +73,7 @@ def p2(f):
     grid, edges, r, c, jx, jy, path_len = parse(f, 2)
     edges[(r, c)].add((jx, jy, path_len))
     edges[(jx, jy)].add((r, c, path_len))
-    # return dfs(edges, r, c, 0, 1, set(), 0, 2)
+    return dfs(edges, r, c, 0, 1, set(), 0, 2)
 
 
 def dfs(graph, r, c, x, y, visited, curr_path_len, part):
