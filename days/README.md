@@ -584,7 +584,8 @@ junction to it.
 Part 1 was straightforward algebra with linear equation system. I didn't simplify it, so it turned out a bit longer, but
 it didn't matter in the end as the running time was still under 1s. For each stone the position can be written as
 $p + vt = q$, where p is the starting position vector in $\mathbb{R}^3$, v the velocity of the stone, t the time elapsed
-and q the new position. So what I did was write this as $Ax = b$ and let numpy.linalg.solve solve it, where A is the
+and q the new position. So what I did was write this as $Ax = b$ and let 
+[numpy.linalg.solve](https://numpy.org/doc/stable/reference/generated/numpy.linalg.solve.html) solve it, where A is the
 coefficient matrix for two stones, x the unknowns we are looking for, and b the starting positions of each stone. To 
 give some conext, what we are looking for in part 1 is the intersection of the paths of any pair of 
 stones that resides within a test area. A confusing detail about this is that naturally one would think that the intersection
@@ -608,15 +609,15 @@ where we can see that the intersection points of the blue line sits on the same 
 different time units.
 
 Now using this idea we get the linear equation system below for two stones, and note that we are only working in 
-$\mathbb{R}^2$ per the puzzle description:
+$\mathbb{R}^2$ per the puzzle description for part 1:
 
 ```math
-\begin{aligned}
-x_n + v_{xn}t_n & = x_{n1} \iff x_{n1} - v_{xn}t_n & = x_n \\
-y_n + v_{yn}t_n & = y_{n1} \iff y_{n1} - v_{yn}t_n & = y_n \\
-x_m + v_{xm}t_m & = x_{m1} \iff x_{m1} - v_{xm}t_m & = x_m \\
-y_m + v_{ym}t_m & = y_{m1} \iff y_{m1} - v_{ym}t_m & = y_m
-\end{aligned}
+\begin{alignat}{3}
+x_n + v_{xn}t_n & = x_{n1} && \iff x_{n1} - v_{xn}t_n && = x_n \\
+y_n + v_{yn}t_n & = y_{n1} && \iff y_{n1} - v_{yn}t_n && = y_n \\
+x_m + v_{xm}t_m & = x_{m1} && \iff x_{m1} - v_{xm}t_m && = x_m \\
+y_m + v_{ym}t_m & = y_{m1} && \iff y_{m1} - v_{ym}t_m && = y_m
+\end{alignat}
 ```
 
 where x_n,y_n and x_m,y_m is the starting position for stone n and m, v_xn,vy_n and v_xm,v_ym the velocity for stone 
@@ -630,12 +631,12 @@ and the last 2 rows for the second stone's x and y coordinates, basically listin
 the linear equation system above. Below is an augmented matrix of the above linear system.
 
 ```math
-\begin{matrix}
-1 0 -t_n 0 x_n \\
-0 1 -t_n 0 y_n \\
-1 0 0 -t_m x_m \\
-0 1 0 -t_m y_m
-\end{matrix}
+\begin{bmatrix}
+1 & 0 & -t_n & 0 & x_n \\
+0 & 1 & -t_n & 0 & y_n \\
+1 & 0 & 0 & -t_m & x_m \\
+0 & 1 & 0 & -t_m & y_m
+\end{bmatrix}
 ```
 
 For instance, if we look at the first pair of stones in the sample input we have:
@@ -648,21 +649,21 @@ For instance, if we look at the first pair of stones in the sample input we have
 Inputting these into the linear equation and subsequently in the coefficient matrix gives:
 
 ```math
-\begin{aligned}
-19 - 2t_n & = x_{n1} \iff x_{n1} - 2t_n & = 19 \\
-13 + t_n & = y_{n1} \iff y_{n1} - t_n & = 13 \\
-18 - t_m & = x_{m1} \iff x_{m1} + t_m & = 18 \\
-19 - t_m & = y_{m1} \iff y_{m1} + t_m & = 19
-\end{aligned}
+\begin{alignat}{3}
+19 - 2t_n & = x_{n1} && \iff x_{n1} - 2t_n && = 19 \\
+13 + t_n & = y_{n1} && \iff y_{n1} - t_n && = 13 \\
+18 - t_m & = x_{m1} && \iff x_{m1} + t_m && = 18 \\
+19 - t_m & = y_{m1} && \iff y_{m1} + t_m && = 19
+\end{alignat}
 ```
 
 ```math
-\begin{matrix}
-1 0 2 0 19 \\
-0 1 -1 0 13 \\
-1 0 0 1 18 \\
-0 1 0 1 19
-\end{matrix}
+\begin{bmatrix}
+1 & 0 & 2 & 0 & 19 \\
+0 & 1 & -1 & 0 &  13 \\
+1 & 0 & 0 & 1 & 18 \\
+0 & 1 & 0 & 1 & 19
+\end{bmatrix}
 ```
 
 In the code this manifests as coefficient matrix a and resulting vector b, where a is the 4x4 coefficients matrix of
@@ -681,13 +682,14 @@ has to be the exact same at the same time for a given stone and the stone we thr
 following equation system
 
 ```math
-\begin{aligned}
-x_n + v_{xn}t_n & = x_s + v_{xs}t_n \\
-y_n + v_{yn}t_n & = y_s + v_{ys}t_n \\
-z_n + v_{zn}t_n & = z_s + v_{zs}t_n
-\end{aligned}
+\begin{alignat}{1}
+x_n + v_{xn}t_n && = x_s + v_{xs}t_n \\
+y_n + v_{yn}t_n && = y_s + v_{ys}t_n \\
+z_n + v_{zn}t_n && = z_s + v_{zs}t_n
+\end{alignat}
 ```
-
+where x_n is the starting position, v_xn the velocity and t_n the time elapsed for stone n and x_s, v_xs, t_n the same
+but for stone s that is the stone we want to throw. Same idea for the y and z counterparts.
 Moving the expressions to one side and then input it into sympy.solve returned the correct answer. Doing this for all 
 the data is too slow, but people found out that it suffices to do it for the first 3 stones, so that's what I did.
 
