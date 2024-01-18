@@ -60,7 +60,9 @@ def compress_graph(grid, r, c):
             if (cx, cy) not in visited:
                 path_len += 1
                 q.append((cx, cy))
-    return grid, edges, r, c, (jx, jy, path_len)
+    edges[(r, c)].add((jx, jy, path_len))
+    edges[(jx, jy)].add((r, c, path_len))
+    return grid, edges, r, c
 
 
 def p1(f):
@@ -70,9 +72,7 @@ def p1(f):
 
 # slow 50s
 def p2(f):
-    grid, edges, r, c, jx, jy, path_len = parse(f, 2)
-    edges[(r, c)].add((jx, jy, path_len))
-    edges[(jx, jy)].add((r, c, path_len))
+    grid, edges, r, c = parse(f, 2)
     return dfs(edges, r, c, 0, 1, set(), 0, 2)
 
 
