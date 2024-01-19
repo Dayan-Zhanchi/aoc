@@ -17,51 +17,28 @@ def parse(f, part):
 def compress_graph(grid, r, c):
     # BFS only keep start, end and junctions
     edges = defaultdict(lambda: set())  # adjacency list
-    q = [(0, 1, 0, set(), 0, 1)]  # x, y, path length, visited, junction_x, junction_y
-    max_iter = 3 * 10 ** 5
-    iter = 0
-    while q and iter < max_iter:
-        x, y, path_len, visited, jx, jy = q.pop(0)
-        if (x, y) in visited:
-            continue
+    junctions = {(x, y) for x, row in enumerate(grid) for y, _ in enumerate(row)
+                 if len(get_neighbors(grid, x, y, 2)) > 2}
+    junctions.add((0, 1))
+    junctions.add((r, c))
+    for j in junctions:
+        jx, jy = j
+        q = [(cx, cy, 1) for (cx, cy, _) in get_neighbors(grid, jx, jy, 2)]
+        visited = {(jx, jy)}
+        while q:
+            x, y, path_len = q.pop(0)
+            if (x, y) in visited:
+                continue
 
-        visited.add((x, y))
-        neighbors = get_neighbors(grid, x, y, 2)
-        if len(neighbors) > 2:
-            # non-directional graph
-            edges[(jx, jy)].add((x, y, path_len))
-            edges[(x, y)].add((jx, jy, path_len))
-            jx, jy = x, y  # new junction point
-            path_len = 0  # reset path length for next junction
-            visited = deepcopy(visited)
-        for cx, cy, _ in neighbors:
-            if (cx, cy) not in visited:
-                q.append((cx, cy, path_len + 1, visited, jx, jy))
-        iter += 1
-
-    # another BFS to find the length between the end and the closest junction to it
-    q = [(r, c)]
-    visited = set()
-    path_len = 0
-    jx, jy = 0, 0
-    while q:
-        x, y = q.pop(0)
-        if (x, y) in visited:
-            continue
-
-        visited.add((x, y))
-        neighbors = get_neighbors(grid, x, y, 2)
-        if len(neighbors) > 2:
-            # found it
-            jx = x
-            jy = y
-            break
-        for cx, cy, _ in neighbors:
-            if (cx, cy) not in visited:
-                path_len += 1
-                q.append((cx, cy))
-    edges[(r, c)].add((jx, jy, path_len))
-    edges[(jx, jy)].add((r, c, path_len))
+            visited.add((x, y))
+            neighbors = get_neighbors(grid, x, y, 2)
+            if len(neighbors) > 2:
+                edges[(jx, jy)].add((x, y, path_len))
+                edges[(x, y)].add((jx, jy, path_len))
+            else:
+                for cx, cy, _ in neighbors:
+                    if (cx, cy) not in visited:
+                        q.append((cx, cy, path_len + 1))
     return grid, edges, r, c
 
 

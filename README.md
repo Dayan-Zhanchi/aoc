@@ -3,11 +3,11 @@ My solutions to aoc23. Code quality is non-existent here, I'm just trying to sol
 For more elaborate thoughts and high-level explanations of my solutions you can find it in [days](days) folder. For a dumb aoc folder, I'm being overly verbose with explaining things and providing instructions here, but it's mostly for myself in case I ever go back to it.
 
 
-## Background
+## Final thoughts
 I've never really tried aoc before. I remember back in 2018-2019 I only ever did a few problems before flat out
 giving up. This year I wanted to commit to it and see it through, and although there were some painful moments, such as
 day 17 where I couldn't get my Dijkstra to work no matter what I did, or solving the DP problem on day 12, or solving the
-equation system in day 24 part 2, I'm glad I stuck with it and finished at the end. After all, aoc is what you make it
+equation system in day 24 part 2, I'm glad I stuck with it and finished it at the end. After all, aoc is what you make it
 to be, and I guess I wanted to see what I was capable of and hopefully learn something in the process. Now I know I suck
 at DP and the more mathy problems, so that's probably something I'll have to work on in the future.
 
@@ -15,6 +15,8 @@ Even though I needed some hints/help on some days and the fact that my solutions
 elegant, I guess I will just take comfort in what Terence Tao once said:
 
 > It is not so much whether you succeed or fail an equation, it is whether you can learn something from it.
+
+Finally, a big thanks to [Eric Wastl](https://github.com/topaz) et al. for creating the puzzles this year (and every other year), was fun and at times challenging!
 
 ## Input data
 Note that the input folder is not included, as it seems to not be allowed according to aoc [policy](https://adventofcode.com/2023/about). So you will have to add it yourself in the root project as a folder named input.
@@ -37,8 +39,7 @@ CookieSessionAOC=<Your-session-cookie>
 **Input**
 * Day 8 needs to be run with -ds flag along with -s if you want to run the samples, as there are designated samples for each part
 * Day 20 part 2 only works with the original input, while part1 works for sample and original input. It's mostly because of how part 2 was meant to be solved.
-* Day 24 part 1 lower and upper limit in p1 method has to be toggled depending on whether sample is running or original input. 
-* Day 25, because of the manual way I solved it, the removal of edges have to be alternated depending on whether sample or original input is run.
+* Day 24 part 1 lower and upper limit in p1 method has to be toggled depending on whether sample is running or original input.
 
 **Running time**
 

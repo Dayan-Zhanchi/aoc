@@ -573,9 +573,25 @@ end node, or more specifically because of the bug the end node was never added, 
 COUNTING the nodes to the last junction. This was so dumb, but it worked in the end. I will have to come back to this
 one sometime in the future to fix the bug.
 
+**Edit 1**
+
 Came back to this to fix the manual counting by using bfs to get the path length between the ending node and the nearest
 junction to it.
 
+**Edit 2**
+
+Came back to this again, never found out exactly what was wrong, but changed strategy, so that the end now is added all together,
+when counting the junction edge costs and start. The idea is to first extract the junctions, and for each junction 
+do BFS until all branches have reached another junction, record the
+path lengths and create the edges between the junction and the other junctions we find. Repeat this process for all junctions. The key is the
+conditional on line 35, that adds the edges only when a junction is found and then immediately stops looking at neighbors. 
+That way the junction we found will not branch out further and instead the focus will be to find the remaining junctions
+to connect to the current junction. Note however that starting from a junction will not connect it to start or end node, but 
+since we are also adding the start and end node to the list of junctions, this means that starting from an end node or start node it
+will through BFS find a junction and connect the two.
+This also speeds up the running time, not by much but reduces it from $\approx 50s$ to $\approx 30s$, 20s speedup, but
+30s in total is still slow, but whatever, it's a np-hard problem and I solved it pretty much with brute-force, so it's to
+be expected I guess.
 
 ---
 
@@ -587,7 +603,7 @@ $p + vt = q$, where p is the starting position vector in $\mathbb{R}^3$, v the v
 and q the new position. So what I did was write this as $Ax = b$ and let 
 [numpy.linalg.solve](https://numpy.org/doc/stable/reference/generated/numpy.linalg.solve.html) solve it, where A is the
 coefficient matrix for two stones, x the unknowns we are looking for, and b the starting positions of each stone. To 
-give some conext, what we are looking for in part 1 is the intersection of the paths of any pair of 
+give some context, what we are looking for in part 1 is the intersection of the paths of any pair of 
 stones that resides within a test area. A confusing detail about this is that naturally one would think that the intersection
 also happens at the same time for both stones, which it doesn't have to in this puzzle. So we are only looking for if
 the path of any two stones ever intersects onwards from time = 0 within a test area. Consequently, this also means we
@@ -707,6 +723,9 @@ visualization, just call nx_draw().
 From the picture it can be seen that the edges we are looking for are `{rrl, pcs}, {lcm, ddl}, {qnd, mbk}`. So just
 remove these edges from the graph and multiply the number of the nodes in the two components, that's the answer.
 
+In hindsight, realized that it suffices to use [nx.minimum_edge_cut()](https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.connectivity.cuts.minimum_edge_cut.html)
+to get the answer, that way don't have to hardcode it or even look at the graph.
+
 As this was the first year I've ever completed aoc, I was genuinely surprised to see that 
 there was only one star for the final day. That was a nice fitting Christmas gift at the end of aoc. 
 
@@ -724,3 +743,5 @@ Even though I needed some hints/help on some days and the fact that my solutions
 elegant, I guess I will just take comfort in what Terence Tao once said:
 
 > It is not so much whether you succeed or fail an equation, it is whether you can learn something from it.
+
+Finally, a big thanks to [Eric Wastl](https://github.com/topaz) et al. for creating the puzzles this year (and every other year), was fun and at times challenging!

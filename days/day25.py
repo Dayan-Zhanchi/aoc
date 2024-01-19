@@ -23,9 +23,10 @@ def p1(f):
     # g.remove_edge('bvb', 'cmg')
     # g.remove_edge('nvd', 'jqt')
     # for original
-    g.remove_edge('pcs', 'rrl')
-    g.remove_edge('lcm', 'ddl')
-    g.remove_edge('qnd', 'mbk')
+    # g.remove_edge('pcs', 'rrl')
+    # g.remove_edge('lcm', 'ddl')
+    # g.remove_edge('qnd', 'mbk')
+    g.remove_edges_from(nx.minimum_edge_cut(g))
     return math.prod(len(c) for c in nx.connected_components(g))
 
 
