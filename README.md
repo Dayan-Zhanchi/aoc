@@ -50,7 +50,7 @@ As I mostly use brute-force and or naive approach, the running times of some pro
 * Day 17 $\approx 3s$ part 1 and $\approx 8s$ part 2
 * Day 21 $\approx 2m40s$ part 2
 * Day 22 $\approx 40s$ part 2
-* Day 23 $\approx 50s$
+* Day 23 $\approx 30s$
 
 
 ## How to run

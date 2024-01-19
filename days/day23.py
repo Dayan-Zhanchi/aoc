@@ -47,7 +47,7 @@ def p1(f):
     return dfs(grid, r, c, 0, 1, set(), 0, 1)
 
 
-# slow 50s
+# slow 30s
 def p2(f):
     grid, edges, r, c = parse(f, 2)
     return dfs(edges, r, c, 0, 1, set(), 0, 2)
