@@ -358,8 +358,8 @@ It should be a straightforward Dijkstra but the modifications needed are
 For this implementation don't even need to keep track of a distance array/dict, just put it into the priority queue, and
 if correctly implemented,
 should always give the least amount of heat to reach the given node the state it's associated with. Because the
-priority queue will always sort in descending order that means as soon as we reach the target we will get the least
-amount of heat and we are done. We would have needed a distance array if we somehow wanted to know the lowest heat for
+priority queue will in this case retrieve items in ascending order that means as soon as we reach the target we will get the least
+amount of heat, and we are done. We would have needed a distance array if we somehow wanted to know the lowest heat for
 more than just the target tile.
 
 ---
@@ -406,7 +406,7 @@ For instance, the very first entry in the 'in' workflow would contain the follow
 WorkflowEntry object `rule: val: 1351, category: s, op: <built-in function lt>, destination: px`. Admittedly, bit more
 OO than previous days (still not much OO honestly), which made the code longer due to boilerplate, but wanted to avoid
 long tuples.
-As for the parts, there were just dictionaries as presented by the input.
+As for the parts, they were just dictionaries as presented by the input.
 
 Before discussing part 1 and 2 I drew a visualization of the sample input, that helped me immensely with designing and
 debugging the algorithm.

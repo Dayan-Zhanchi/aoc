@@ -66,6 +66,9 @@ Run main.py with the correct year, day and whether you want to use sample + orig
  ```
 
 ## Flags
+Note that I've only solved aoc 2023, so the only valid year argument is 2023. I just preemptively added it in case
+I do more aoc in the future. 
+
 ```
 -y             # year of aoc
 -d             # day of aoc problem
